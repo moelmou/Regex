@@ -4,12 +4,18 @@
 #include<string.h>
 #include<ctype.h>
 
+#define FINAL_STATES 1
+#define ALPHABET_CHARCTERS 2
+
+
+
 struct node
 {
         int st;//etat suivante
         struct node *link; 
 };
 
+void     DefineDFA();    //Fill transition table
 void findclosure(int,int);
 void insert_trantbl(int ,char, int);
 int findalpha(char);
@@ -354,8 +360,9 @@ int main()
                 int nostate=stack[stackPtr - 1][j - 1];
                 int finalstate=stack[stackPtr - 1][j - 1];
                 int start=stack[stackPtr - 1][0];
+
                 fprintf(fp,"\nStart State:\tq%d\nAccept State:\tq%d\n",stack[stackPtr - 1][0], stack[stackPtr - 1][j - 1]);
-        
+
         
         
                 int i1,j1,k,m,t,n;
@@ -378,16 +385,23 @@ int main()
                 }
         fprintf(Fdfa,"Dfa equivalent d epsilon-NFA \n");
         fprintf(Fdfa,"-----------------------------------\n");
-        fprintf(Fdfa,"Etat depart:");
+        FILE *filePointer0;
+            filePointer0 = fopen("Start_state.txt", "w");
+        fprintf(Fdfa,"Etat depart: ");
             print_e_closure(start, Fdfa);
-        fprintf(Fdfa,"\n Etats :" );
+            print_e_closure(start, filePointer0);
+        FILE *filePointerr;
+            filePointerr = fopen("all_states_enum.txt", "w");
+        fprintf(Fdfa,"\n Etats : \n" );
         for(i1=2;i1<nostate;i1++){
             print_e_closure(i1, Fdfa);
-            
               fprintf(Fdfa,"\n");
+            print_e_closure(i1,filePointerr);
+              fprintf(filePointerr,"\n");
         }
         fprintf(Fdfa,"\nLes tnransitions sont...:\n");
-
+            FILE *filePointer1 ;
+            filePointer1 = fopen("transitions.txt", "w");
         for(i1=2;i1<nostate;i1++)
         {
 
@@ -407,27 +421,35 @@ int main()
                                 }
                 }
                             fprintf(Fdfa,"\n");
-                            int asmae=0;
+                            fprintf(filePointer1,"\n");
+                            int Khaoula=0;
                              for(n=1;n<=nostate;n++)
                             {
                                  if(set[n]!=0)
-                                        asmae++;
+                                        Khaoula++;
                             }
-                            if(asmae!=0){
-                              print_e_closure(i1,Fdfa);
-                              fprintf(Fdfa,"%c",alphabet[j1]  );
-                          //  fprintf(Fdfa,"{");
+                            if(Khaoula!=0){
+                            print_e_closure(i1,filePointer1);
+                            print_e_closure(i1,Fdfa);
+                            fprintf(filePointer1,"  %c  ",alphabet[j1]  );
+                            fprintf(Fdfa,"  %c  ",alphabet[j1]  );
+
                             for(n=1;n<=nostate;n++)
                             {
             
-                                        if(set[n]!=0)
+                                        if(set[n]!=0){
                                                 fprintf(Fdfa,"%d",n);
+                                                fprintf(filePointer1,"%d",n);
+                                        }
+                                               
+
                             }
-                           // fprintf(Fdfa,"}");
                            }
             }
     }
         fprintf(Fdfa,"\n Etats Finaux:");
+          FILE *filePointer2 ;
+            filePointer2 = fopen("Final_states.txt", "w");
           int j2,k2;
                       for(j2=1;j2<nostate;j2++)
                       {
@@ -435,10 +457,13 @@ int main()
                                 {
                                          if(e_closure[j2][k2]==finalstate)
                                         {
-
                                                  print_e_closure(j2,Fdfa);
+                                                 print_e_closure(j2,filePointer2);
                                         }
                                }
+                                    fprintf(Fdfa," ");
+                                    fprintf(filePointer2," ");
+
                       }
         }
         else
@@ -487,7 +512,7 @@ void insert_trantbl(int r,char c,int s)//insertion dans la table des transitions
             j=findalpha(c);
           if(j==999)
           {
-                     printf("%c\n",c);
+                     printf("%c  \n",c);
                      printf("error\n");
                     exit(0);
           }
@@ -521,7 +546,6 @@ void print_e_closure(int i, FILE* Fdfa) //Ecrire les e-cloture
         int j;
         int k;
         int TRI[50];
-      //  fprintf(Fdfa,"{");
         for(j=0;e_closure[i][j]!=0;j++){
             TRI[j]=e_closure[i][j];
         }
@@ -540,6 +564,5 @@ void print_e_closure(int i, FILE* Fdfa) //Ecrire les e-cloture
             if(TRI[k]!=0)
             fprintf(Fdfa,"%d",TRI[k]);
         }
-     // printf("%d",e_closure[i][j]);
-      //   fprintf(Fdfa,"}");
+        
 }
