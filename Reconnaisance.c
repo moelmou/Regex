@@ -7,7 +7,7 @@
 #define REACHED_FINAL_STATE 2
 enum DFA_STATES{q0,q1};
 enum input{a,b};
-int Accepted_states[FINAL_STATES]={q1};
+int Accepted_states[FINAL_STATES];
 char alphabet[ALPHABET_CHARCTERS]={'a','b'};
 int Transition_Table[TOTAL_STATES][ALPHABET_CHARCTERS];
 int Current_state=q0;
@@ -31,14 +31,13 @@ int i,pos;
             return REACHED_FINAL_STATE;
     return NOT_REACHED_FINAL_STATE;
 }
-int main(void)
+int execute_reconnainsance(void)
 {
     char current_symbol;
     int result;
  
     DefineDFA();    //Fill transition table
  
-    printf("Enter a string with 'a' s and 'b's:\n Press Enter Key to stop\n");
  
  
     while((current_symbol=getchar())!= '\n')
