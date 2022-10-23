@@ -13,4 +13,4 @@ le processus à suivre :
 4. Minimiser l’AFD obtenu en 3 (algorithme de Hopcroft).
 5. Appliquer l’algorithme de reconnaissance du mot w sur l’AFDm minimal obtenu en 4.
 
-# The Project is still not done yet (stopped in step 4, skiped step 2) !!
+# The Project is still not done yet (stopped in step 4, skipped step 2) !!
